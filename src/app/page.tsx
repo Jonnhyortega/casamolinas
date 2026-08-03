@@ -4,13 +4,15 @@ import ManifestoSection from "@/components/ManifestoSection";
 import EditionSection from "@/components/EditionSection";
 import ProductsSection from "@/components/ProductsSection";
 import ExperienceSection from "@/components/ExperienceSection";
+import ArgentineWineSection from "@/components/ArgentineWineSection";
+import WhySubscribeSection from "@/components/WhySubscribeSection";
 import { getTiendanubeProducts } from "@/lib/tiendanube";
 
 export default async function Home() {
   const { products, isLive } = await getTiendanubeProducts();
 
   return (
-    <main className="min-h-screen bg-[#0b2227] text-[#f8f4ef] w-full flex flex-col items-center justify-center gap-15 overflow-x-hidden">
+    <main className="min-h-screen bg-[#0b2227] text-[#f8f4ef] w-full flex flex-col items-center justify-center gap-15 overflow-x-hidden ">
       {/* Navigation */}
       <Navbar />
 
@@ -28,6 +30,12 @@ export default async function Home() {
 
       {/* Section 5: La experiencia Casa Molinas / Cómo Funciona */}
       <ExperienceSection />
+
+      {/* Section 6: El vino argentino, desde la curiosidad */}
+      <ArgentineWineSection />
+
+      {/* Section 7: ¿Por qué suscribirte? */}
+      <WhySubscribeSection />
 
       <footer className="py-12 border-t border-[#d8caaa]/20 text-center text-sm text-[#f8f4ef]/50">
         <p>© {new Date().getFullYear()} Casa Molinas - Club de Vinos. Todos los derechos reservados.</p>

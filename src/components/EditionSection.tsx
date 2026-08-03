@@ -21,19 +21,19 @@ export default function EditionSection() {
   return (
     <section
       id="edicion"
-      className="relative w-full pt-20 pb-36 sm:pt-28 sm:pb-44 px-6 sm:px-12 lg:px-16 max-w-7xl mx-auto overflow-hidden flex flex-col items-center justify-center"
+      className="relative w-full max-w-7xl mx-auto px-6 sm:px-12 md:px-16 lg:px-24 pt-20 pb-36 sm:pt-28 sm:pb-44 overflow-hidden flex flex-col items-center justify-center text-center"
     >
       {/* Background Subtle Ambient Glow / Wine Crimson Aura */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[450px] bg-[#781622]/15 rounded-full blur-[140px] pointer-events-none" />
 
-      <div className="relative z-10 max-w-6xl mx-auto flex flex-col gap-10 sm:gap-14">
+      <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center justify-center text-center gap-10 sm:gap-14">
         {/* Header Section Centered */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.7, ease: "easeOut" }}
-          className="flex flex-col items-center text-center gap-5 max-w-4xl mx-auto"
+          className="flex flex-col items-center  text-center gap-5 max-w-4xl mx-auto"
         >
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white leading-tight text-center">
             ¿Qué es una Edición?

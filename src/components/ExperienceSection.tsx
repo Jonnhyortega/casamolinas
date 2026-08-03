@@ -25,14 +25,14 @@ export default function ExperienceSection() {
   return (
     <section
       id="experiencia"
-      className="relative w-full py-20 sm:py-28 lg:py-36 px-4 sm:px-8 lg:px-12 max-w-7xl mx-auto overflow-hidden text-white flex flex-col items-center justify-center text-center"
+      className="relative w-full py-20 sm:py-28 lg:py-36 px-6 sm:px-12 md:px-16 lg:px-24 max-w-7xl mx-auto overflow-hidden text-white flex flex-col items-center justify-center text-center"
     >
       {/* Background Subtle Radial Glow / Ambient Texture */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-35">
         <div className="w-[1000px] h-[600px] bg-[#e54d52]/15 rounded-full blur-[150px]" />
       </div>
 
-      <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col md:gap-0 sm:gap-16 items-center justify-center">
+      <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col gap-12 sm:gap-16 items-center justify-center text-center">
         {/* Header Block */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}

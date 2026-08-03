@@ -29,19 +29,19 @@ export default function Hero3D() {
     container.appendChild(renderer.domElement);
 
     // --- LIGHTS ---
-    const keyLight = new THREE.DirectionalLight(0xfff0dd, 4.0);
-    keyLight.position.set(5, 6, 5);
+    const keyLight = new THREE.DirectionalLight(0xfff5ea, 4.0);
+    keyLight.position.set(4, 5, 4);
     scene.add(keyLight);
 
-    const fillLight = new THREE.PointLight(0x9b1b30, 5, 20);
-    fillLight.position.set(-6, -2, 3);
+    const fillLight = new THREE.PointLight(0x9b1b30, 6, 20);
+    fillLight.position.set(-5, -2, 3);
     scene.add(fillLight);
 
-    const rimLight = new THREE.DirectionalLight(0xd8caaa, 3.5);
+    const rimLight = new THREE.DirectionalLight(0xd8caaa, 4.0);
     rimLight.position.set(3, 5, -4);
     scene.add(rimLight);
 
-    const ambient = new THREE.AmbientLight(0xffffff, 1.2);
+    const ambient = new THREE.AmbientLight(0xffffff, 1.4);
     scene.add(ambient);
 
     // --- 3D BOTTLE & ACCENTS ---
@@ -71,8 +71,8 @@ export default function Hero3D() {
     // Rich Burgundy Glass Material
     const glassMat = new THREE.MeshPhysicalMaterial({
       color: 0x4a0e17,
-      emissive: 0x1f0308,
-      roughness: 0.12,
+      emissive: 0x240409,
+      roughness: 0.1,
       metalness: 0.2,
       transmission: 0.65,
       transparent: true,
@@ -107,7 +107,7 @@ export default function Hero3D() {
     // Label on the bottle body
     const labelGeo = new THREE.CylinderGeometry(0.61, 0.61, 1.25, 64, 1, true, -Math.PI / 2.6, (Math.PI * 2) / 2.6);
     
-    // Create a high-res canvas texture for the label
+    // Canvas texture for the label
     const labelCanvas = document.createElement("canvas");
     labelCanvas.width = 512;
     labelCanvas.height = 512;
@@ -160,13 +160,13 @@ export default function Hero3D() {
     bottleGroup.rotation.y = -0.3;
 
     // --- GOLDEN & WINE-RED PARTICLES ---
-    const particleCount = 80;
+    const particleCount = 70;
     const particleGeo = new THREE.BufferGeometry();
     const posArray = new Float32Array(particleCount * 3);
     const speedArray = new Float32Array(particleCount);
 
     for (let i = 0; i < particleCount * 3; i += 3) {
-      posArray[i] = (Math.random() - 0.5) * 12;
+      posArray[i] = (Math.random() - 0.5) * 10;
       posArray[i + 1] = (Math.random() - 0.5) * 10;
       posArray[i + 2] = (Math.random() - 0.5) * 6;
       speedArray[i / 3] = 0.003 + Math.random() * 0.004;
@@ -191,7 +191,7 @@ export default function Hero3D() {
     const pTexture = new THREE.CanvasTexture(pCanvas);
 
     const particleMat = new THREE.PointsMaterial({
-      size: 0.2,
+      size: 0.22,
       map: pTexture,
       transparent: true,
       blending: THREE.AdditiveBlending,
@@ -213,18 +213,26 @@ export default function Hero3D() {
     ring.position.set(0, -0.3, 0);
     bottleGroup.add(ring);
 
-    // --- MOUSE TRACKING & PARALLAX ---
+    // --- MOUSE & TOUCH TRACKING ---
     let mouseX = 0;
     let mouseY = 0;
     let targetX = 0;
     let targetY = 0;
 
-    const onMouseMove = (e: MouseEvent) => {
-      mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-      mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+    const handleInputMove = (clientX: number, clientY: number) => {
+      mouseX = (clientX / window.innerWidth - 0.5) * 2;
+      mouseY = (clientY / window.innerHeight - 0.5) * 2;
+    };
+
+    const onMouseMove = (e: MouseEvent) => handleInputMove(e.clientX, e.clientY);
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        handleInputMove(e.touches[0].clientX, e.touches[0].clientY);
+      }
     };
 
     window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
 
     // --- RESPONSIVE POSITIONS ---
     const updateLayout = () => {
@@ -235,15 +243,15 @@ export default function Hero3D() {
       renderer.setSize(width, height);
 
       if (width < 768) {
-        rootGroup.position.set(0, -1.0, -1);
-        bottleGroup.scale.set(0.65, 0.65, 0.65);
+        // Mobile: Shift bottle to the right side and scale down so it doesn't cover text
+        rootGroup.position.set(0.7, -0.3, -1);
+        bottleGroup.scale.set(0.55, 0.55, 0.55);
       } else if (width < 1024) {
         rootGroup.position.set(1.2, -0.2, 0);
         bottleGroup.scale.set(0.8, 0.8, 0.8);
       } else {
-        // Balanced desktop position: further inside than before
         rootGroup.position.set(1.4, 0, 0);
-        bottleGroup.scale.set(0.95, 0.95, 0.95);
+        bottleGroup.scale.set(1.0, 1.0, 1.0);
       }
     };
 
@@ -256,19 +264,15 @@ export default function Hero3D() {
     const animate = () => {
       const elapsedTime = clock.getElapsedTime();
 
-      // Smooth mouse follow
       targetX += (mouseX - targetX) * 0.04;
       targetY += (mouseY - targetY) * 0.04;
 
-      // Gentle floating animation for the bottle
       bottleGroup.position.y = Math.sin(elapsedTime * 1.2) * 0.12;
       bottleGroup.rotation.y = -0.3 + Math.sin(elapsedTime * 0.5) * 0.15 + targetX * 0.2;
       bottleGroup.rotation.x = 0.1 + targetY * 0.15;
 
-      // Ring rotation
       ring.rotation.z = elapsedTime * 0.2;
 
-      // Animate particles
       const positions = particleGeo.attributes.position.array as Float32Array;
       for (let i = 0; i < particleCount; i++) {
         let yIdx = i * 3 + 1;
@@ -288,6 +292,7 @@ export default function Hero3D() {
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("resize", updateLayout);
       if (container && renderer.domElement) {
         container.removeChild(renderer.domElement);
@@ -300,7 +305,7 @@ export default function Hero3D() {
   return (
     <div
       ref={containerRef}
-      className="absolute inset-0 w-full h-full pointer-events-none z-10"
+      className="absolute inset-0 w-full h-full pointer-events-none z-10 opacity-60 sm:opacity-100"
     />
   );
 }
